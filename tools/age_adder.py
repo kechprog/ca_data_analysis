@@ -15,8 +15,8 @@ async def fetch(session, id):
             return None
 
 async def main():
-    skater_by_year = []
     for ptype in ['skaters', 'goalies']:
+        skater_by_year = []
         for year in range(2008, 2023):
             df = pd.read_csv(f'./data/raw/{year}{ptype}.csv')
             player_ids = df['playerId']
@@ -27,6 +27,7 @@ async def main():
                 date_of_births = await asyncio.gather(*tasks)
                 df['age'] = year - pd.Series(date_of_births).apply(lambda x: pd.Timestamp(x).year)
                 df['date_of_birth'] = date_of_births
+                df['year'] = year
                 print(f'Finished {year}')
                 skater_by_year.append(df)
 
